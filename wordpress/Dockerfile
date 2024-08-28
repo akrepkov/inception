@@ -1,0 +1,20 @@
+FROM debian:buster
+
+# Install required packages and clean up after
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget php8.2 curl php-fpm php-mysql php-curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create necessary directories
+RUN mkdir -p /run/php/ /var/www/ /var/www/html
+
+# Copy setup script and make it executable
+COPY setup.sh /tmp/
+RUN chmod +x /tmp/setup.sh
+
+EXPOSE 9000
+# Set up the entry point to the setup script
+ENTRYPOINT [ "/tmp/setup.sh" ]
+
+
