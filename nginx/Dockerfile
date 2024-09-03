@@ -26,3 +26,8 @@ EXPOSE 443
 #результат которых нужно "положить" в конечный образ или раздел. Для этого есть RUN.
 CMD ["nginx", "-g", "daemon off;"]
 # Start Nginx in the foreground to keep the container running
+
+
+
+# apk add --no-cache nginx openssl && \
+# rm -rf /var/cache/apk/* /tmp/*

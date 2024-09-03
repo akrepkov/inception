@@ -13,6 +13,8 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - network
+    ports:
+      - "3306:3306"
 
   wordpress:
     build: ./wordpress
@@ -22,7 +24,7 @@ services:
       - mariadb
     restart: unless-stopped
     volumes:
-      - wp-data:/var/www/wordpress/
+      - wp-data:/var/www/html/
     env_file:
       - .env
     networks:
@@ -38,29 +40,25 @@ services:
     env_file:
       - .env
     volumes:
-      - wp-data:/var/www/wordpress/
+      - wp-data:/var/www/html/
     networks:
       - network
     ports:
       - "443:443"
-
 
 networks:
   network:
     driver: bridge
 
 volumes:
-
   wp-data:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   o: bind
-    #   device: /home/$USER/data/wp
+    driver_opts:
+      type: none
+      o: bind #Bind Mount the host directory /home/$USER/data/wordpress to the volume wp-data.
+      device: /home/$USER/data/wordpress #uses it as a volume on the host machine
       
   db-data:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   o: bind
-    #   device: /home/$USER/data/db
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/$USER/data/mariadb

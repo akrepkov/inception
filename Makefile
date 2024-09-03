@@ -1,30 +1,36 @@
 NAME = inception
 
 all:
-	@printf "Start containers"
+	@echo "Start containers\n"
 	@docker-compose -f ./docker-compose.yml up -d
 
 build:
-	@printf "Build images before starting containers"
+	@echo "Build images before starting containers\n"
 	@docker-compose -f ./docker-compose.yml up -d --build
 
 down:
-	@printf "Stop containers"
+	@echo "Stop containers\n"
 	@docker-compose -f ./docker-compose.yml down
 
 re: down
-	@printf "Restart containers"
+	@echo "Restart containers\n"
 	@docker-compose -f ./docker-compose.yml up -d --build
 
 clean: down
-	@printf "Remove unused networks, containers, images, volumes"
-	@docker system prune -a
+	@echo "Remove unused networks, containers, images, volumes\n"
+	@docker system prune --all --force
 
 fclean:
-	@printf "Remove all containers, volumes, networks and images"
-	@docker stop $$(docker ps -qa)
+	@echo "Remove all containers, volumes, networks and images\n"
+	@docker stop $(docker ps -aq) || true 
+	@docker-compose down 
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
+
+#Stop all running containers; `|| true` to avoid errors if no containers are running
+#kill mariadb???
+#refresh firefox?
+#@docker-compose down  do I need it in fclean?
 
 .PHONY : all build down re clean fclean
