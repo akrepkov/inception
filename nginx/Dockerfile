@@ -1,6 +1,7 @@
 FROM debian:bookworm
 #latest version
-USER root
+ENV DEBIAN_FRONTEND=noninteractive
+# USER root
 #continue from root
 RUN	apt-get update && apt-get upgrade -y && \
 	apt-get --purge remove apache2 && \

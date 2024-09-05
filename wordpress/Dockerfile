@@ -2,7 +2,7 @@ FROM debian:bookworm
 
 # Install required packages and clean up after
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends ca-certificates \
-    wget php8.2 curl php-fpm php-mysql php-curl \
+    wget php8.2 curl php-fpm php-mysql php-curl net-tools\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -15,6 +15,6 @@ RUN chmod +x /tmp/setup.sh
 
 EXPOSE 9000
 # Set up the entry point to the setup script
-ENTRYPOINT [ "/tmp/setup.sh" ]
+ENTRYPOINT ["/tmp/setup.sh"]
 
 

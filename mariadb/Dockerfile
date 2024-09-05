@@ -1,8 +1,12 @@
-FROM debian:bookworm 
+FROM debian:bookworm
 
+ENV DEBIAN_FRONTEND=noninteractive
+#debconf is the configuration management system used by Debian packages to interact with users during package installation. 
+# It supports various interfaces (e.g., Dialog, Readline, Teletype)
+# In Docker containers, where there's no terminal, so debconf fails to initialize them
 COPY ./setup_mariadb.sh /docker-entrypoint-initdb.d/
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y mariadb-client mariadb-server && \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y mariadb-client mariadb-server apt-utils && \
 	chmod +x docker-entrypoint-initdb.d/setup_mariadb.sh
 
 EXPOSE 3306

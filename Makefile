@@ -7,7 +7,8 @@ all:
 build:
 	@echo "Build images before starting containers\n"
 	@docker-compose -f ./docker-compose.yml up -d --build
-
+#@docker-compose -f ./docker-compose.yml up -d --build  > /dev/null 2>&1 - to silent all the messages
+#2>&1: Redirects standard error to the same place as standard output (/dev/null)
 down:
 	@echo "Stop containers\n"
 	@docker-compose -f ./docker-compose.yml down
@@ -22,8 +23,8 @@ clean: down
 
 fclean:
 	@echo "Remove all containers, volumes, networks and images\n"
-	@docker stop $(docker ps -aq) || true 
-	@docker-compose down 
+	@docker-compose down
+	@docker rm -f $(docker ps -aq) || true
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
